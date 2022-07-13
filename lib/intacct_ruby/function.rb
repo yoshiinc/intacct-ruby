@@ -13,6 +13,7 @@ module IntacctRuby
       create
       update
       delete
+      create_sotransaction
     ).freeze
 
     CU_TYPES = %w(create update).freeze
