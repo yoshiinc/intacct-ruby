@@ -14,6 +14,9 @@ module IntacctRuby
       update
       delete
       create_sotransaction
+      update_sotransaction
+      create_supdoc
+      update_supdoc
     ).freeze
 
     CU_TYPES = %w(create update).freeze
