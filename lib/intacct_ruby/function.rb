@@ -20,11 +20,16 @@ module IntacctRuby
       update_supdoc
     ).freeze
 
+    CONCAT_TYPES = %w(
+      update_sotransaction
+    ).freeze
+
     CU_TYPES = %w(create update).freeze
 
-    def initialize(function_type, object_type: nil, parameters: )
+    def initialize(function_type, object_type: nil, concat_key: nil, parameters: )
       @function_type = function_type.to_s
       @object_type = object_type.to_s
+      @concat_key = concat_key.to_s
       @parameters = parameters
 
       validate_type!
@@ -34,13 +39,19 @@ module IntacctRuby
       xml = Builder::XmlMarkup.new
 
       xml.function controlid: controlid do
-        xml.tag!(@function_type) do
-          if CU_TYPES.include?(@function_type)
-            xml.tag!(@object_type) do
+        if CONCAT_TYPES.include?(@function_type)
+          xml.update_sotransaction key: @concat_key do
+            xml << parameter_xml(@parameters)
+          end
+        else
+          xml.tag!(@function_type) do
+            if CU_TYPES.include?(@function_type)
+              xml.tag!(@object_type) do
+                xml << parameter_xml(@parameters)
+              end
+            else
               xml << parameter_xml(@parameters)
             end
-          else
-            xml << parameter_xml(@parameters)
           end
         end
       end
