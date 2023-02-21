@@ -69,7 +69,7 @@ module IntacctRuby
       super unless Function::ALLOWED_TYPES.include? method_name.to_s
 
       # object_type must be the first argument in arguments
-      @functions << Function.new(method_name, arguments.shift, *arguments)
+      @functions << Function.new(method_name, **(arguments.shift))
     end
 
     def respond_to_missing?(method_name, include_private = false)
